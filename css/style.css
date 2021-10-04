@@ -1,0 +1,16 @@
+.container {
+  margin-top: 40px;
+}
+
+.product {
+  display: flex;
+  /* outline: 1px solid #ccc; */
+  margin: 20px 0;
+}
+.product img {
+  width: 100%;
+}
+.product .info {
+  padding: 20px;
+}
+

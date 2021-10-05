@@ -65,6 +65,7 @@
         var title = doc.data().title;
         var price = doc.data().price.toLocaleString();
         var date = doc.data().date || null;
+        var image = doc.data().image;
         if(date) {
           date = new Date(date.seconds*1000).toLocaleString();
         } else {
@@ -74,7 +75,7 @@
         var html = `
           <div class="product">
             <figure class="thumbnail">
-              <img src="https://via.placeholder.com/300" alt="${title}">
+              <img src="${image}" alt="${title}">
             </figure>
             <div class="info">
               <h4 class="title">${title}</h4>

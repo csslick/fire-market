@@ -70,27 +70,48 @@
 
     $('#send').on('click', function(){
       // 이미지 파일 업로드
-      const storageRef = storage.ref();
       /* 파일명은 유저별로 유니크하게 만들어야 함 - uid+파일명 */
-      const savePath = storageRef.child('images/' + $('#image').val());
+      const savePath = storage.ref().child('images/' + $('#image').val());
       const file = document.querySelector('#image').files[0]; // 파일객체
       const upload = savePath.put(file); // 파일업로드
 
-      // 데이터 저장
-      const data = {
-        title: $('#title').val(),
-        content: $('#content').val(),
-        price: $('#price').val(),
-      }
-      console.log(title, content, price);
+      // 이미지 업로드 완료시
+      upload.on('state_changed', 
+        // 진행중
+        null,
+        // 실패
+        (err) => {
+          console.log('업로드 실패', err);
+        },
+        // 성공
+        () => {
+          upload.snapshot.ref.getDownloadURL().then(url => {
+            console.log('업로드 URL', url);
+            saveData(url);
+          });
+        }
+      )
 
-      db.collection('products').add(data).then(()=>{
-        alert('전송완료');
-        window.location.href = './';
-      })
-      .catch(err=>{
-        alert('전송에러');
-      });
+      function saveData(url) {
+          // 데이터 저장
+          const data = {
+            title: $('#title').val(),
+            content: $('#content').val(),
+            price: $('#price').val(),
+            image: url,
+          }
+          console.log(title, content, price);
+
+          db.collection('products').add(data).then((res)=>{
+            console.log('res = ', res);
+            alert('전송완료');
+            // window.location.href = './';
+          })
+          .catch(err=>{
+            alert('전송에러');
+          });
+      }
+
     })
   </script>
 
